@@ -80,7 +80,6 @@ MarathiBPE/
 │   ├── app.py                 # Flask API server
 │   ├── merges.json            # Trained tokenizer model (generated)
 │   ├── requirements.txt       # Python dependencies
-│   └── mrbpe/                 # Virtual environment (optional)
 │
 ├── frontend/
 │   ├── index.html             # Web interface
@@ -443,3 +442,4 @@ This project is created for educational purposes. Feel free to use, modify, and 
 ---
 
 **Made with ❤️ for Marathi Language Processing**
+
