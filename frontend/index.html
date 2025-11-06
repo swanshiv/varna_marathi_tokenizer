@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>वर्ण - मराठी टोकनायझर</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Header -->
+    <header class="app-header">
+        <div class="header-content">
+            <div class="logo">
+                <svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <circle cx="20" cy="20" r="18" fill="#ff6b35" opacity="0.2"/>
+                    <path d="M20 8 L20 32 M8 20 L32 20" stroke="#ff6b35" stroke-width="3" stroke-linecap="round"/>
+                    <circle cx="20" cy="20" r="6" fill="#ff6b35"/>
+                </svg>
+            </div>
+            <div class="header-title">
+                <h1 class="brand-name">वर्ण</h1>
+                <span class="tagline">मराठी टोकनायझर</span>
+            </div>
+            <div class="header-powered-by">
+                <span>Powered by Byte Pair Encoding (BPE) Algorithm</span>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <div class="container">
+        <!-- Combined Toggle Controls -->
+        <div class="controls-container">
+            <!-- Encoder/Decoder Tabs (Left) -->
+            <div class="tabs-wrapper">
+                <div class="tabs">
+                    <button class="tab-btn active" data-tab="encoder">Encoder</button>
+                    <button class="tab-btn" data-tab="decoder">Decoder</button>
+                </div>
+            </div>
+            
+            <!-- Corpus Toggle (Right) -->
+            <div class="corpus-toggle-wrapper">
+                <div class="corpus-toggle">
+                    <button class="corpus-toggle-btn active" id="toggle-small" data-corpus="vani-small">
+                        vani-small
+                    </button>
+                    <button class="corpus-toggle-btn" id="toggle-large" data-corpus="vani-large">
+                        vani-large
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Encoder Tab Content -->
+        <div id="encoder-tab" class="tab-content active">
+            <div class="two-column-layout">
+                <!-- Left Panel: Input -->
+                <div class="left-panel">
+                    <div class="input-section">
+                        <textarea 
+                            id="text-input" 
+                            placeholder="मराठी मजकूर येथे टाइप करा..."
+                        ></textarea>
+                    </div>
+                    
+                    <div class="sample-texts">
+                        <label>Sample Texts:</label>
+                        <div class="sample-buttons">
+                            <button class="sample-btn" data-text="नमस्कार आपले मराठी टोकनायझर या प्रोजेक्ट मध्ये स्वागत आहे.">नमस्कार आपले मराठी टोकनायझर या प्रोजेक्ट मध्ये स्वागत आहे.</button>
+                            <button class="sample-btn" data-text="या प्रोजेक्ट चे नाव वर्ण आहे.">या प्रोजेक्ट चे नाव वर्ण आहे.</button>
+                            <button class="sample-btn" data-text="मराठी मध्ये प्रत्येक शब्द हा वर्षापासून तयार झाला आहे.">मराठी मध्ये प्रत्येक शब्द हा वर्षापासून तयार झाला आहे.</button>
+                            <button class="sample-btn" data-text="महाराष्ट्र हे गौरवशाली राज्य आहे.">महाराष्ट्र हे गौरवशाली राज्य आहे.</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right Panel: Output -->
+                <div class="right-panel">
+                    <div id="encode-result" class="result hidden">
+                        <!-- Stats Counters -->
+                        <div class="stats-counters">
+                            <div class="stat-item">
+                                <span class="stat-label">Tokens</span>
+                                <span class="stat-value" id="stat-tokens">0</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-label">Characters</span>
+                                <span class="stat-value" id="stat-characters">0</span>
+                            </div>
+                        </div>
+                        
+                        <!-- Toggle Control -->
+                        <div class="token-view-toggle">
+                            <button class="toggle-btn active" id="toggle-tokens" data-view="tokens">
+                                Actual Tokens
+                            </button>
+                            <button class="toggle-btn" id="toggle-ids" data-view="ids">
+                                Token IDs
+                            </button>
+                        </div>
+                        
+                        <!-- Single Token Display Container (shows one view at a time) -->
+                        <div class="token-section">
+                            <!-- Actual Tokens Section -->
+                            <div class="token-view-section active" id="tokens-view">
+                                <div class="token-section-header">
+                                    <h3>Actual Tokens</h3>
+                                    <button id="copy-tokens-btn" class="copy-btn" title="Copy all tokens">
+                                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                                            d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 
+                                            002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/>
+                                        </svg>
+                                    </button>
+                                </div>
+                                <div class="token-box-container" id="token-boxes-container">
+                                    <!-- Token boxes will be inserted here -->
+                                </div>
+                            </div>
+                            
+                            <!-- Token IDs Section -->
+                            <div class="token-view-section" id="ids-view">
+                                <div class="token-section-header">
+                                    <h3>Token IDs</h3>
+                                    <button id="copy-ids-btn" class="copy-btn" title="Copy Token IDs">
+                                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                                            d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 
+                                            002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/>
+                                        </svg>
+                                    </button>
+                                </div>
+                                <div class="token-box-container" id="token-ids-container">
+                                    <!-- Token ID boxes will be inserted here -->
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="verification-section">
+                            <h3>Verification (Decoded Back)</h3>
+                            <div class="decoded-text" id="decoded-verification"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Decoder Tab Content -->
+        <div id="decoder-tab" class="tab-content">
+            <div class="two-column-layout">
+                <!-- Left Panel: Input -->
+                <div class="left-panel">
+                    <div class="input-section">
+                        <label for="token-input">Enter Token IDs (comma-separated or JSON array):</label>
+                        <textarea 
+                            id="token-input" 
+                            placeholder="123, 456, 789..."
+                        ></textarea>
+                    </div>
+                    
+                    <!-- Spacer to match encoder panel height -->
+                    <div class="sample-texts spacer-placeholder">
+                        <div style="height: 1px; visibility: hidden;"></div>
+                    </div>
+                </div>
+
+                <!-- Right Panel: Output -->
+                <div class="right-panel">
+                    <div id="decode-result" class="result hidden">
+                        <h3>Decoded Text:</h3>
+                        <div class="text-display" id="decoded-text"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="app-footer">
+        <p>Copyright - Shivranjan Kolvankar 2025</p>
+    </footer>
+
+    <div id="loading" class="loading hidden">
+        <div class="spinner"></div>
+        <p>Processing...</p>
+    </div>
+
+    <div id="error" class="error hidden"></div>
+
+    <script src="script.js"></script>
+</body>
+</html>
